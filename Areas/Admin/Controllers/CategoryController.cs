@@ -5,8 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics;
 
-namespace BulkyWeb.Controllers
+namespace BulkyWeb.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
         private IUnitOfWork _unitOfWork;
@@ -29,7 +30,7 @@ namespace BulkyWeb.Controllers
         public IActionResult Create(Category category)
         {
             // validation
-            if(!category.Name.IsNullOrEmpty() && category.Name.ToLower() == category.DisplayOrder.ToString())
+            if (!category.Name.IsNullOrEmpty() && category.Name.ToLower() == category.DisplayOrder.ToString())
             {
                 // "name" should match "asp-for" in the View
                 ModelState.AddModelError("name", "Category Name should not match Display Order");
@@ -42,7 +43,8 @@ namespace BulkyWeb.Controllers
                 ModelState.AddModelError("", "\"Test\" is not a valid name");
             }
 
-            if (ModelState.IsValid) { 
+            if (ModelState.IsValid)
+            {
                 _unitOfWork.Category.Add(category);
                 _unitOfWork.Save();
                 TempData["create"] = "Data created successfully!";
@@ -55,15 +57,15 @@ namespace BulkyWeb.Controllers
         // 參數categoryId會由 Index.cshtml中傳遞 使用 asp-route-categoryId="@obj.Id"
         public IActionResult Edit(int? categoryId)
         {
-            if(categoryId==null || categoryId == 0) { return NotFound(); }
-            
+            if (categoryId == null || categoryId == 0) { return NotFound(); }
+
             // there are three ways to search in datatbase
             // the "find()" can be only used to find by its key
-            Category? category = _unitOfWork.Category.Get(u=>u.Id==categoryId);
+            Category? category = _unitOfWork.Category.Get(u => u.Id == categoryId);
             // Category? category2 = _db.Categories.FirstOrDefault(u=>u.Id==categoryId);
             // Category? category3 = _db.Categories.Where(u => u.Id == categoryId).FirstOrDefault();
-            
-            if(category == null) { return NotFound(); }
+
+            if (category == null) { return NotFound(); }
 
             return View(category);
         }
@@ -90,7 +92,7 @@ namespace BulkyWeb.Controllers
             if (categoryId2 == null || categoryId2 == 0) { return NotFound(); }
 
 
-            Category? category = _unitOfWork.Category.Get(u=>u.Id==categoryId2);
+            Category? category = _unitOfWork.Category.Get(u => u.Id == categoryId2);
 
 
             if (category == null) { return NotFound(); }

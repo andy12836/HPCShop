@@ -7,8 +7,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace BulkyWeb.Controllers
+namespace BulkyWeb.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class ProductController : Controller
     {
 
@@ -24,8 +25,8 @@ namespace BulkyWeb.Controllers
 
         public IActionResult Index()
         {
-            List<Product> objProductList = _unitOfWork.Product.GetAll(includeProperties:"Category").ToList();
-   
+            List<Product> objProductList = _unitOfWork.Product.GetAll(includeProperties: "Category").ToList();
+
 
 
             return View(objProductList);
@@ -40,11 +41,11 @@ namespace BulkyWeb.Controllers
             // IEnumerable<SelectListItem> takes in Text and Value
             // press F12 on "SelectListItem to check the property"
             //IEnumerable<SelectListItem> CategoryList = _unitOfWork.Category.GetAll().Select(
-                //u => new SelectListItem
-                //{
-                //    Text = u.Name,
-                //    Value = u.Id.ToString(),
-                //});
+            //u => new SelectListItem
+            //{
+            //    Text = u.Name,
+            //    Value = u.Id.ToString(),
+            //});
 
             // ViewBag transfers data from controller to view.
             // ViewBag's life only exists during the current http request
@@ -64,7 +65,7 @@ namespace BulkyWeb.Controllers
                 })
             };
 
-            if(productId == null || productId == 0)
+            if (productId == null || productId == 0)
             {
                 //create
                 return View(productVM);
@@ -72,10 +73,10 @@ namespace BulkyWeb.Controllers
             else
             {
                 //update
-                productVM.Product = _unitOfWork.Product.Get(u=>u.Id == productId);
+                productVM.Product = _unitOfWork.Product.Get(u => u.Id == productId);
                 return View(productVM);
             }
-            
+
         }
 
         [HttpPost]
@@ -94,7 +95,7 @@ namespace BulkyWeb.Controllers
                     if (!string.IsNullOrEmpty(obj.Product.ImageUrl))
                     {
                         // delete old image
-                        var oldImgPath = 
+                        var oldImgPath =
                             Path.Combine(wwwRootPath, obj.Product.ImageUrl.TrimStart('\\'));
                         if (System.IO.File.Exists(oldImgPath))
                         {
@@ -121,7 +122,7 @@ namespace BulkyWeb.Controllers
                     _unitOfWork.Product.Update(obj.Product);
                 }
 
-                
+
                 _unitOfWork.Save();
                 TempData["create"] = "Data created successfully!";
                 return RedirectToAction("index");
@@ -136,9 +137,9 @@ namespace BulkyWeb.Controllers
                 });
                 return View(obj);
             };
-            
+
         }
-        
+
 
         // method "Edit" is combined into "Upsert"
         //public IActionResult Edit(int? productId)
@@ -150,7 +151,7 @@ namespace BulkyWeb.Controllers
         //    Product? product = _unitOfWork.Product.Get(u => u.Id == productId);
         //    // Category? category2 = _db.Categories.FirstOrDefault(u=>u.Id==categoryId);
         //    // Category? category3 = _db.Categories.Where(u => u.Id == categoryId).FirstOrDefault();
-            
+
         //    if (product == null) { return NotFound(); }
 
         //    return View(product);
@@ -178,7 +179,7 @@ namespace BulkyWeb.Controllers
             if (productId2 == null || productId2 == 0) { return NotFound(); }
 
 
-            Product? product= _unitOfWork.Product.Get(u => u.Id == productId2);
+            Product? product = _unitOfWork.Product.Get(u => u.Id == productId2);
 
 
             if (product == null) { return NotFound(); }
