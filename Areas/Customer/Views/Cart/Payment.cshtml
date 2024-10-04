@@ -1,0 +1,12 @@
+﻿
+@{
+    TempData["OrderHeaderId"] = TempData["id"];
+}
+<div>Success! (Your order should be in process)</div>
+
+<form method="post">
+    <button asp-action="PaymentPost" asp-controller="cart" type="submit" class="btn">Pay Now (Move status to "Approved")</button>
+</form>
+
+
+<a asp-action="Index" asp-controller="home" class="btn">Back to home</a>

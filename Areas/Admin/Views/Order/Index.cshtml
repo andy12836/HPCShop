@@ -1,0 +1,101 @@
+﻿@{
+    var status = Context.Request.Query["status"];
+    var pending = "text-primary";
+    var inprocess = "text-primary";
+    var completed = "text-primary";
+    var approved = "text-primary";
+    var all = "text-primary";
+
+    switch (status)
+    {
+        case "pending":
+            pending = "active text-white bg-primary";
+            break;
+        case "inprocess":
+            inprocess = "active text-white bg-primary";
+            break;
+        case "completed":
+            completed = "active text-white bg-primary";
+            break;
+        case "approved":
+            approved = "active text-white bg-primary";
+            break;
+        default:
+            all = "active text-white bg-primary";
+            break;
+
+    }
+
+}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<div class="container">
+    <div class="row pt-4 pb-3">
+        <div class="col-6"><h2>Order List</h2></div>
+        <div class="col-6 text-end">
+
+        </div>
+
+    </div>
+</div>
+<div>
+    <span></span>
+    <ul class="list-group list-group-horizontal-sm">
+        <a style="text-decoration:none;" asp-controller="Order" asp-action="Index" asp-route-status="inprocess">
+        <li class="list-group-item @inprocess">In Process</li>
+        </a>
+        <a style="text-decoration:none;" asp-controller="Order" asp-action="Index" asp-route-status="pending">
+        <li class="list-group-item @pending">Payment Pending</li>
+        </a>
+        <a style="text-decoration:none;" asp-controller="Order" asp-action="Index" asp-route-status="completed">
+        <li class="list-group-item @completed">Completed</li>
+        </a>
+        <a style="text-decoration:none;" asp-controller="Order" asp-action="Index" asp-route-status="approved">
+        <li class="list-group-item @approved">Approved</li>
+        </a>
+        <a style="text-decoration:none;" asp-controller="Order" asp-action="Index" asp-route-status="all">
+        <li class="list-group-item @all">All</li>
+        </a>
+    </ul>
+</div>
+<table id="tblData" class="table table-bordered table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone Number</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Total</th>
+            <th></th>
+        </tr>
+    </thead>
+
+</table>
+
+
+
+@*
+<h1>datatable介紹</h1>
+<table id="table_id" class="display">
+    <thead>
+        <tr>
+            <th>信用卡公司</th>
+            <th>回饋 / 名額</th>
+            <th>五倍券優惠活動</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>兆豐銀行</td>
+            <td>$300 產品（限量8萬名）<br>最高5千抽獎</td>
+            <td>期限綁定台灣Pay/信用卡，可享一次抽獎，最高獎金5千元(110/12/31前)</td>
+        </tr>
+
+    </tbody>
+</table>
+<table id="tableAjax" class="table table-striped table-bordered" style="width:100%"></table>
+*@
+
+
+<script src="~/js/order.js">
+</script>

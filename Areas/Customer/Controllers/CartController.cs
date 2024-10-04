@@ -4,6 +4,7 @@ using Bulky.Models.ViewModels;
 using Bulky.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Configuration;
 using System.Security.Claims;
 
 namespace BulkyWeb.Areas.Customer.Controllers
@@ -154,9 +155,42 @@ namespace BulkyWeb.Areas.Customer.Controllers
 
             }
 
-            
+            return RedirectToAction(nameof(Payment), new {OrderHeaderId = ShoppingCartVM.OrderHeader.Id}); 
+        }
 
-            return RedirectToAction(nameof(Index)); 
+        public IActionResult Payment(int OrderHeaderId)
+        {
+
+            OrderHeader orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == OrderHeaderId, includeProperties: "AppUser");
+
+
+            // clear shopping cart
+            IEnumerable<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart.GetAll(u => u.AppUserId == orderHeader.AppUserId);
+            _unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
+
+            _unitOfWork.Save();
+            TempData["id"] = orderHeader.Id;
+            return View(new {id = OrderHeaderId});
+        }
+
+        [HttpPost]
+        [ActionName("PaymentPost")]
+        public IActionResult PaymentPost()
+        {
+            if (TempData.ContainsKey("OrderHeaderId"))
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            //int OrderHeaderId = 20;
+            //// update orderHeader status to "Approved"
+            //OrderHeader orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == OrderHeaderId, includeProperties: "AppUser");
+
+            //orderHeader.OrderStatus = SD.StatusApproved;
+            //orderHeader.PaymentStatus = SD.PaymentStatusApproved;
+            //_unitOfWork.OrderHeader.Update(orderHeader);
+
+
+            return RedirectToAction(nameof(Index));
         }
 
         private double GetPriceBasedOnQuantity (ShoppingCart shoppingCart)

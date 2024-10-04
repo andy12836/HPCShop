@@ -107,7 +107,8 @@ namespace BulkyWeb.Areas.Identity.Pages.Account
 
             public string RoleType { get; set; }
             public IEnumerable<SelectListItem> RoleList { get; set; }
-            public string? StreetAddress { get; set; }
+            [Required]
+            public string StreetAddress { get; set; }
             public string? City { get; set; }
             public string? State { get; set; }
             public string? PostalCode { get; set; }
