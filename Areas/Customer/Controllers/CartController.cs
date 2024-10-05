@@ -177,17 +177,20 @@ namespace BulkyWeb.Areas.Customer.Controllers
         [ActionName("PaymentPost")]
         public IActionResult PaymentPost()
         {
+            int OrderHeaderId;
             if (TempData.ContainsKey("OrderHeaderId"))
             {
+                OrderHeaderId = (int)TempData["OrderHeaderId"];
+                OrderHeader orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == OrderHeaderId, includeProperties: "AppUser");
+
+                orderHeader.OrderStatus = SD.StatusApproved;
+                orderHeader.PaymentStatus = SD.PaymentStatusApproved;
+                _unitOfWork.OrderHeader.Update(orderHeader);
+                _unitOfWork.Save();
                 return RedirectToAction(nameof(Index));
             }
-            //int OrderHeaderId = 20;
-            //// update orderHeader status to "Approved"
-            //OrderHeader orderHeader = _unitOfWork.OrderHeader.Get(u => u.Id == OrderHeaderId, includeProperties: "AppUser");
+            // update orderHeader status to "Approved"
 
-            //orderHeader.OrderStatus = SD.StatusApproved;
-            //orderHeader.PaymentStatus = SD.PaymentStatusApproved;
-            //_unitOfWork.OrderHeader.Update(orderHeader);
 
 
             return RedirectToAction(nameof(Index));
